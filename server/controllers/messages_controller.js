@@ -16,6 +16,7 @@ module.exports = {
     const newMessage = new Message(id, text, time);
     id++;
     messages.push(newMessage);
+    res.status(200).send(messages);
   },
   update: (req, res, next) => {
     const { id } = req.params;
