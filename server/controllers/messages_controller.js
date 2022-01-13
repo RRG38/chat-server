@@ -1,30 +1,30 @@
 let messages = [];
 let id = 0;
 
-class Message {
-  constructor(id, text, time) {
-    this.id = id;
-    this.text = text;
-    this.time = time;
-  }
-}
-
 module.exports = {
-  read: (req, res, next) => {
+  read: (req, res) => {
     res.status(200).send(messages);
   },
   create: (req, res, next) => {
     const { text, time } = req.body;
-    const newMessage = new Message(id, text, time);
+    messages.push({ id, text, time });
     id++;
-    messages.push(newMessage);
     res.status(200).send(messages);
   },
-  update: (req, res, next) => {
-    const { id } = req.params;
+  update: (req, res) => {
     const { text } = req.body;
-    const index = messages.findIndex((e) => e.id === +id);
-    messages[index].text = text;
+    const updateID = req.params.id;
+    const messageIndex = messages.findIndex(
+      (message) => message.id == updateID
+    );
+    let message = messages[messageIndex];
+
+    messages[messageIndex] = {
+      id: message.id,
+      text: text || message.text,
+      time: message.time,
+    };
+
     res.status(200).send(messages);
   },
   delete: (req, res, next) => {
